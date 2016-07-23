@@ -4,14 +4,16 @@
 
 let express = require('express')
     , routes = require('./routes');
+let fs = require("fs");
+
 
 let app = module.exports = express.createServer();
-let port =process.env.NODE_ENV  | 3000;
+let port = process.env.NODE_ENV | 3000;
 
 
 // Configuration
 
-app.configure(()=>{
+app.configure(()=> {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'ejs');
     app.use(express.bodyParser());
@@ -22,18 +24,21 @@ app.configure(()=>{
     app.use(express.static(__dirname + '/public'));
 });
 
-app.configure('development', ()=>{
+app.configure('development', ()=> {
     app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
 });
 
-app.configure('production', ()=>{
+app.configure('production', ()=> {
     app.use(express.errorHandler());
 });
 
-// Routes
+fs.readdirSync('./controllers').forEach((file)=> {
+    if (file.substr(-3) == '.js') {
+        let route = require('./controllers/' + file);
+        route.controllers(app);
+    }
+});
 
-app.get('/', routes.index);
-
-app.listen(port, ()=>{
+app.listen(port, ()=> {
     console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });

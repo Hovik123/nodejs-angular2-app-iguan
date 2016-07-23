@@ -5,12 +5,15 @@ var cssmin = require('gulp-cssmin');
 let dest="public/assets";
 let paths = {
     js: [
-        "bower_components/jquery/dist/jquery.min.js",
-        "bower_components/bootstrap/dist/js/bootstrap.min.js"
+        "public/node_modules/core-js/client/shim.min.js",
+        "public/node_modules/zone.js/dist/zone.js",
+        "public/node_modules/reflect-metadata/Reflect.js",
+        "public/node_modules/systemjs/dist/system.src.js",
+        "public/systemjs.config.js",
+
 
     ],
     css: [
-        "bower_components/bootstrap/dist/css/bootstrap.css",
         "public/stylesheets/style.css"
     ],
     fonts: [
@@ -19,6 +22,7 @@ let paths = {
 };
 gulp.task("copy", ()=> {
     gulp.src(paths.js)
+        .pipe(uglify())
         .pipe(concat('app.js'))
         .pipe(gulp.dest(dest+"/js"));
     gulp.src(paths.css)
@@ -39,6 +43,9 @@ gulp.task("copy:production", ()=> {
     gulp.src(paths.fonts)
         .pipe(gulp.dest(dest+"/fonts"));
 });
+gulp.task("server",()=>{
+
+});
 
 gulp.task('watch',function(){
     gulp.watch(paths.js,["copy"]);
@@ -46,3 +53,4 @@ gulp.task('watch',function(){
 });
 gulp.task("default",["copy","watch"]);
 gulp.task("production",["copy:production"]);
+

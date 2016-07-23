@@ -1,8 +1,7 @@
+let HomeController =require("../controllers/HomeContrller");
+module.exports.routes = (app)=> {
 
-/*
- * GET home page.
- */
+    app.get('/',HomeController.getName(req,res));
 
-exports.index = function(req, res){
-  res.render('index', { title: 'Express' })
+    app.get('/login', routes.login);
 };
